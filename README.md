@@ -1,57 +1,60 @@
 # gulp-inject-html
 
+[![Build Status](https://travis-ci.org/Schmicko/gulp-inject-html.svg?branch=master)](https://travis-ci.org/Schmicko/gulp-inject-html)
+
 Inject HTML snippets in build
 
 ## Methods
 
-´´´js
-append(str) // Appends the string
-prepend(str) // Prepends the string
-wrap(start, end) // Wraps file contents in between *start* and *end*
-before(search, str) // Inserts the string before the first occurence of *search*
-after(search, str) // Inserts the string after the first occurence of *search*
+```js
+    append(str)         // Appends the string
+    prepend(str)        // Prepends the string
+    wrap(start, end)    // Wraps file contents in between *start* and *end*
+    before(search, str) // Inserts the string before the first occurence of *search*
+    after(search, str)  // Inserts the string after the first occurence of *search*
 ```
-
 
 ## Examples
 
+See `examples/build` for output.
+
 ```js
-var gulp = require('gulp'),
-    rename = require('gulp-rename'),
-    injectHtml = require('../');
+    var gulp = require('gulp'),
+        rename = require('gulp-rename'),
+        injectHtml = require('../');
 
-gulp.task('inject:append', function(){
-    gulp.src('src/example.html')
-        .pipe(injectHtml.append('\n<!-- Created: ' + Date() + ' -->'))
-        .pipe(rename('append.html'))
-        .pipe(gulp.dest('build'));
-});
+    gulp.task('inject:append', function(){
+        gulp.src('src/example.html')
+            .pipe(injectHtml.append('\n<!-- Created: ' + Date() + ' -->'))
+            .pipe(rename('append.html'))
+            .pipe(gulp.dest('build'));
+    });
 
-gulp.task('inject:prepend', function(){
-    gulp.src('src/example.html')
-        .pipe(injectHtml.prepend('<!-- Created: ' + Date() + ' -->\n'))
-        .pipe(rename('prepend.html'))
-        .pipe(gulp.dest('build'));
-});
+    gulp.task('inject:prepend', function(){
+        gulp.src('src/example.html')
+            .pipe(injectHtml.prepend('<!-- Created: ' + Date() + ' -->\n'))
+            .pipe(rename('prepend.html'))
+            .pipe(gulp.dest('build'));
+    });
 
-gulp.task('inject:wrap', function(){
-    gulp.src('src/example.html')
-        .pipe(injectHtml.wrap('<!-- Created: ' + Date() + ' -->\n', '<!-- Author: Mike Hazell -->'))
-        .pipe(rename('wrap.html'))
-        .pipe(gulp.dest('build'));
-});
+    gulp.task('inject:wrap', function(){
+        gulp.src('src/example.html')
+            .pipe(injectHtml.wrap('<!-- Created: ' + Date() + ' -->\n', '<!-- Author: Mike Hazell -->'))
+            .pipe(rename('wrap.html'))
+            .pipe(gulp.dest('build'));
+    });
 
-gulp.task('inject:before', function(){
-    gulp.src('src/example.html')
-        .pipe(injectHtml.before('<script', '<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>\n'))
-        .pipe(rename('before.html'))
-        .pipe(gulp.dest('build'));
-});
+    gulp.task('inject:before', function(){
+        gulp.src('src/example.html')
+            .pipe(injectHtml.before('<script', '<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>\n'))
+            .pipe(rename('before.html'))
+            .pipe(gulp.dest('build'));
+    });
 
-gulp.task('inject:after', function(){
-    gulp.src('src/example.html')
-        .pipe(injectHtml.after('</title>', '\n<link rel="stylesheet" href="test.css">\n'))
-        .pipe(rename('after.html'))
-        .pipe(gulp.dest('build'));
-});
+    gulp.task('inject:after', function(){
+        gulp.src('src/example.html')
+            .pipe(injectHtml.after('</title>', '\n<link rel="stylesheet" href="test.css">\n'))
+            .pipe(rename('after.html'))
+            .pipe(gulp.dest('build'));
+    });
 ```
