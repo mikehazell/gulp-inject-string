@@ -20,8 +20,12 @@ describe('gulp-inject-html', function(){
         it('should define a wrap method', function(){
             expect(injectHtml.wrap).to.be.a('function');
         });
-        it('should define a before method');
-        it('should define an after method');
+        it('should define a before method', function(){
+            expect(injectHtml.before).to.be.a('function');
+        });
+        it('should define an after method', function(){
+            expect(injectHtml.after).to.be.a('function');
+        });
     });
 
 
@@ -100,6 +104,85 @@ describe('gulp-inject-html', function(){
             });
 
             stream.write(fakeFile);
+        });
+
+    });
+
+    describe('before', function () {
+        var fakeFile;
+
+        beforeEach(function () {
+            fakeFile = new gutil.File({
+                base: 'test/fixtures',
+                cwd: 'test',
+                path: 'test/fixtures/index.html',
+                contents: new Buffer(fixtureFile)
+            });
+        });
+
+
+        it('should insert the given string before the first instance of the search string', function(done){
+            var stream = injectHtml.before('</body>','<h1>Before test</h1>');
+            var expectedFile = fs.readFileSync( path.join(__dirname, './expected/before.html'));
+
+            stream.once('data', function(newFile){
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
+        it('should do nothing if the search string is not found', function(done){
+            var stream = injectHtml.before('IAMNOTTHERE', '<h1>Before test</h1>');
+            var expectedFile = String(fixtureFile);
+
+            stream.once('data', function(newFile){
+                expect(String(newFile.contents)).to.equal(expectedFile);
+                done();
+            });
+
+            stream.write(fakeFile)
+
+        });
+
+    });
+
+    describe('after', function () {
+        var fakeFile;
+
+        beforeEach(function () {
+            fakeFile = new gutil.File({
+                base: 'test/fixtures',
+                cwd: 'test',
+                path: 'test/fixtures/index.html',
+                contents: new Buffer(fixtureFile)
+            });
+        });
+
+        it('should insert the given string after the first instance of the search string', function(done){
+            var stream = injectHtml.after('</body>','<h1>After test</h1>');
+            var expectedFile = fs.readFileSync( path.join(__dirname, './expected/after.html'));
+
+            stream.once('data', function(newFile){
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
+        it('should do nothing if the search string is not found', function(done){
+            var stream = injectHtml.after('IAMNOTTHERE','<h1>After test</h1>');
+            var expectedFile = String(fixtureFile);
+
+            stream.once('data', function(newFile){
+                expect(String(newFile.contents)).to.equal(expectedFile);
+                done();
+            });
+
+            stream.write(fakeFile);
+
         });
 
     });
