@@ -1,21 +1,3 @@
-# gulp-inject-html
-
-Inject HTML snippets in build
-
-## Methods
-
-´´´js
-append(str) // Appends the string
-prepend(str) // Prepends the string
-wrap(start, end) // Wraps file contents in between *start* and *end*
-before(search, str) // Inserts the string before the first occurence of *search*
-after(search, str) // Inserts the string after the first occurence of *search*
-```
-
-
-## Examples
-
-```js
 var gulp = require('gulp'),
     rename = require('gulp-rename'),
     injectHtml = require('../');
@@ -54,4 +36,5 @@ gulp.task('inject:after', function(){
         .pipe(rename('after.html'))
         .pipe(gulp.dest('build'));
 });
-```
+
+gulp.task('default', ['inject:append', 'inject:prepend', 'inject:wrap', 'inject:before', 'inject:after']);

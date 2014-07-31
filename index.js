@@ -9,13 +9,12 @@
 var es = require('event-stream'),
     gutil = require('gulp-util');
 
-
-var stream = function(injectMethod, opts){
+var stream = function(injectMethod){
     return es.map(function (file, cb) {
         try {
             file.contents = new Buffer( injectMethod( String(file.contents) ));
         } catch (err) {
-            return cb(new gutil.PluginError('gulp-inject-reload', err, opts));
+            return cb(new gutil.PluginError('gulp-inject-html', err));
         }
         cb(null, file);
     });
@@ -26,19 +25,19 @@ module.exports = {
         return stream(function(fileContents){
             // assume str is a string for now
             return fileContents + String(str);
-        }, str);
+        });
     },
     prepend: function(str){
         return stream(function(fileContents){
             // assume str is a string for now
             return String(str) + fileContents;
-        }, str);
+        });
     },
     wrap: function(start, end){
         return stream(function(fileContents){
             // assume start and end are strings
             return String(start) + fileContents + String(end);
-        },  {start:start, end:end });
+        });
     },
     before: function(search, str){
         return stream(function(fileContents){
@@ -52,8 +51,7 @@ module.exports = {
             } else {
                 return fileContents;
             }
-
-        }, {search: search, str: str});
+        });
     },
     after: function(search, str){
         return stream(function(fileContents){
@@ -66,6 +64,8 @@ module.exports = {
             } else {
                 return fileContents;
             }
-        }, {search:search, str:str});
+        });
     }
 };
+
+module.exports._stream = stream;

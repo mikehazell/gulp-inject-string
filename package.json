@@ -25,6 +25,8 @@
   "homepage": "https://github.com/Schmicko/gulp-inject-html",
   "devDependencies": {
     "chai": "^1.9.1",
+    "gulp": "^3.8.6",
+    "gulp-rename": "^1.2.0",
     "mocha": "^1.21.3"
   },
   "dependencies": {

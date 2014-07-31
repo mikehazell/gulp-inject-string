@@ -187,4 +187,18 @@ describe('gulp-inject-html', function(){
 
     });
 
+    describe('_stream', function () {
+
+        it('should fail with a gulp-util.PluginError', function(done){
+            var stream = injectHtml._stream(null, { method: 'fail' });
+
+            stream.once('error', function(error){
+                expect(error.plugin).to.equal('gulp-inject-html');
+                done();
+            });
+
+            stream.write('not a buffer');
+        });
+
+    });
 });
