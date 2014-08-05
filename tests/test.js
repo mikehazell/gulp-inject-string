@@ -4,27 +4,27 @@ var fs = require('fs'),
     gutil = require('gulp-util'),
     mocha = require('mocha'),
     expect = require('chai').expect,
-    injectHtml = require('../');
+    inject = require('../');
 
 var fixtureFile = fs.readFileSync(path.join(__dirname, './fixtures/index.html'));
 
-describe('gulp-inject-html', function(){
+describe('gulp-inject-string', function(){
 
     describe('interface', function(){
         it('should define an append method', function(){
-            expect(injectHtml.append).to.be.a('function');
+            expect(inject.append).to.be.a('function');
         });
         it('should define a prepend method', function(){
-            expect(injectHtml.prepend).to.be.a('function');
+            expect(inject.prepend).to.be.a('function');
         });
         it('should define a wrap method', function(){
-            expect(injectHtml.wrap).to.be.a('function');
+            expect(inject.wrap).to.be.a('function');
         });
         it('should define a before method', function(){
-            expect(injectHtml.before).to.be.a('function');
+            expect(inject.before).to.be.a('function');
         });
         it('should define an after method', function(){
-            expect(injectHtml.after).to.be.a('function');
+            expect(inject.after).to.be.a('function');
         });
     });
 
@@ -43,7 +43,7 @@ describe('gulp-inject-html', function(){
         });
 
         it('should append the given string to the file', function(done){
-            var stream = injectHtml.append('foorbar');
+            var stream = inject.append('foorbar');
             var expectedFile = fixtureFile + 'foorbar';
 
             stream.once('data', function(newFile){
@@ -69,7 +69,7 @@ describe('gulp-inject-html', function(){
         });
 
         it('should prepend the given string to the file', function(done){
-            var stream = injectHtml.prepend('foobar');
+            var stream = inject.prepend('foobar');
             var expectedFile = 'foobar' + fixtureFile;
 
             stream.once('data', function(newFile){
@@ -95,7 +95,7 @@ describe('gulp-inject-html', function(){
         });
 
         it('should warp the file with the given strings', function(done){
-            var stream = injectHtml.wrap('foo', 'bar');
+            var stream = inject.wrap('foo', 'bar');
             var expectedFile = 'foo' + fixtureFile + 'bar';
 
             stream.once('data', function(newFile){
@@ -122,7 +122,7 @@ describe('gulp-inject-html', function(){
 
 
         it('should insert the given string before the first instance of the search string', function(done){
-            var stream = injectHtml.before('</body>','<h1>Before test</h1>');
+            var stream = inject.before('</body>','<h1>Before test</h1>');
             var expectedFile = fs.readFileSync( path.join(__dirname, './expected/before.html'));
 
             stream.once('data', function(newFile){
@@ -134,7 +134,7 @@ describe('gulp-inject-html', function(){
         });
 
         it('should do nothing if the search string is not found', function(done){
-            var stream = injectHtml.before('IAMNOTTHERE', '<h1>Before test</h1>');
+            var stream = inject.before('IAMNOTTHERE', '<h1>Before test</h1>');
             var expectedFile = String(fixtureFile);
 
             stream.once('data', function(newFile){
@@ -161,7 +161,7 @@ describe('gulp-inject-html', function(){
         });
 
         it('should insert the given string after the first instance of the search string', function(done){
-            var stream = injectHtml.after('</body>','<h1>After test</h1>');
+            var stream = inject.after('</body>','<h1>After test</h1>');
             var expectedFile = fs.readFileSync( path.join(__dirname, './expected/after.html'));
 
             stream.once('data', function(newFile){
@@ -173,7 +173,7 @@ describe('gulp-inject-html', function(){
         });
 
         it('should do nothing if the search string is not found', function(done){
-            var stream = injectHtml.after('IAMNOTTHERE','<h1>After test</h1>');
+            var stream = inject.after('IAMNOTTHERE','<h1>After test</h1>');
             var expectedFile = String(fixtureFile);
 
             stream.once('data', function(newFile){
@@ -190,7 +190,7 @@ describe('gulp-inject-html', function(){
     describe('_stream', function () {
 
         it('should fail with a gulp-util.PluginError', function(done){
-            var stream = injectHtml._stream(null, { method: 'fail' });
+            var stream = inject._stream(null, { method: 'fail' });
 
             stream.once('error', function(error){
                 expect(error.plugin).to.equal('gulp-inject-html');

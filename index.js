@@ -1,6 +1,6 @@
 /*
- * gulp-inject-html
- * https://github.com/Schmicko/gulp-inject-html
+ * gulp-inject-string
+ * https://github.com/Schmicko/gulp-inject-string
  *
  * Copyright (c) 2014 Michael Hazell
  * Licensed under the MIT license.
@@ -14,7 +14,7 @@ var stream = function(injectMethod){
         try {
             file.contents = new Buffer( injectMethod( String(file.contents) ));
         } catch (err) {
-            return cb(new gutil.PluginError('gulp-inject-html', err));
+            return cb(new gutil.PluginError('gulp-inject-string', err));
         }
         cb(null, file);
     });

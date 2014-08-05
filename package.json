@@ -1,14 +1,14 @@
 {
-  "name": "gulp-inject-html",
+  "name": "gulp-inject-string",
   "version": "0.0.0",
-  "description": "Inject HTML snippets in build",
+  "description": "Inject snippets in build",
   "main": "index.js",
   "scripts": {
     "test": "mocha tests/test.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Schmicko/gulp-inject-html.git"
+    "url": "https://github.com/Schmicko/gulp-inject-string.git"
   },
   "keywords": [
     "gulpplugin",
@@ -20,9 +20,9 @@
   "author": "Michael Hazell",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Schmicko/gulp-inject-html/issues"
+    "url": "https://github.com/Schmicko/gulp-inject-string/issues"
   },
-  "homepage": "https://github.com/Schmicko/gulp-inject-html",
+  "homepage": "https://github.com/Schmicko/gulp-inject-string",
   "devDependencies": {
     "chai": "^1.9.1",
     "gulp": "^3.8.6",
