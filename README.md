@@ -1,6 +1,7 @@
 # gulp-inject-string
 
 [![Build Status](https://travis-ci.org/Schmicko/gulp-inject-string.svg?branch=master)](https://travis-ci.org/Schmicko/gulp-inject-string)
+[![NPM version](https://badge.fury.io/js/gulp-inject-string.svg)](http://badge.fury.io/js/gulp-inject-string)
 
 Inject snippets in build
 
