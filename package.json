@@ -1,6 +1,6 @@
 {
   "name": "gulp-inject-string",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Inject snippets in build",
   "main": "index.js",
   "scripts": {
