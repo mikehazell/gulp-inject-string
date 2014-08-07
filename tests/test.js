@@ -193,7 +193,7 @@ describe('gulp-inject-string', function(){
             var stream = inject._stream(null, { method: 'fail' });
 
             stream.once('error', function(error){
-                expect(error.plugin).to.equal('gulp-inject-html');
+                expect(error.plugin).to.equal('gulp-inject-string');
                 done();
             });
 
