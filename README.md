@@ -1,6 +1,6 @@
 # gulp-inject-string
 
-[![Build Status](https://travis-ci.org/Schmicko/gulp-inject-html.svg?branch=master)](https://travis-ci.org/Schmicko/gulp-inject-html)
+[![Build Status](https://travis-ci.org/Schmicko/gulp-inject-string.svg?branch=master)](https://travis-ci.org/Schmicko/gulp-inject-string)
 
 Inject snippets in build
 
