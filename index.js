@@ -39,31 +39,67 @@ module.exports = {
             return String(start) + fileContents + String(end);
         });
     },
+    _appendString: function(fileContents, stringInTheMiddle, endSearch) {
+        var start, end;
+
+        start = fileContents.substr(0, endSearch);
+        end = fileContents.substr(endSearch);
+
+        return start + stringInTheMiddle + end;
+    },
     before: function(search, str){
+        var self = this;
+
         return stream(function(fileContents){
-            var index, start, end;
+            var index;
             // the simplest thing ...
             index = fileContents.indexOf(search);
             if(index > -1){
-                start = fileContents.substr(0, index);
-                end = fileContents.substr(index);
-                return start + str + end;
+                return self._appendString(fileContents, str, index);
             } else {
                 return fileContents;
             }
         });
     },
     after: function(search, str){
+        var self = this;
+
         return stream(function(fileContents){
-            var index, start, end;
+            var index;
             index = fileContents.indexOf(search);
             if(index > -1){
-                start = fileContents.substr(0, index + search.length);
-                end = fileContents.substr(index + search.length);
-                return start + str + end;
+                return self._appendString(fileContents, str, index + search.length);
             } else {
                 return fileContents;
             }
+        });
+    },
+    before_array: function(search, array) {
+        var self = this;
+        return stream(function(fileContents){
+            var index, finalRet = fileContents;
+            index = fileContents.indexOf(search);
+
+            if(index > -1){
+                for (i=array.length -1; i >= 0; i--) {
+                    finalRet = self._appendString(finalRet, array[i] + "\n", index);
+                }
+            }
+            return finalRet;
+        });
+    },
+    after_array: function(search, array) {
+        var self = this;
+        return stream(function(fileContents){
+            var index, finalRet = fileContents;
+            index = fileContents.indexOf(search);
+
+            if(index > -1){
+                for (i=array.length -1; i >= 0; i--) {
+                    finalRet = self._appendString(finalRet, "\n" + array[i], index + search.length);
+                }
+            }
+            return finalRet;
         });
     }
 };
