@@ -8,11 +8,13 @@ Inject snippets in build
 ## Methods
 
 ```js
-    append(str)         // Appends the string
-    prepend(str)        // Prepends the string
-    wrap(start, end)    // Wraps file contents in between *start* and *end*
-    before(search, str) // Inserts the string before the first occurence of *search*
-    after(search, str)  // Inserts the string after the first occurence of *search*
+append(str)             // Appends the string
+prepend(str)            // Prepends the string
+wrap(start, end)        // Wraps file contents in between *start* and *end*
+before(search, str)     // Inserts the string before the first occurence of *search*
+after(search, str)      // Inserts the string after the first occurence of *search*
+beforeEach(search, str) // Inserts the string before each occurence of *search*
+afterEach(search, str)  // Inserts the string after each occurence of *search*
 ```
 
 ## Examples
@@ -57,6 +59,20 @@ gulp.task('inject:after', function(){
     gulp.src('src/example.html')
         .pipe(inject.after('</title>', '\n<link rel="stylesheet" href="test.css">\n'))
         .pipe(rename('after.html'))
+        .pipe(gulp.dest('build'));
+});
+
+gulp.task('inject:beforeEach', function(){
+    gulp.src('src/example.html')
+        .pipe(inject.beforeEach('</p', ' Finis.'))
+        .pipe(rename('beforeEach.html'))
+        .pipe(gulp.dest('build'));
+});
+
+gulp.task('inject:afterEach', function(){
+    gulp.src('src/example.html')
+        .pipe(inject.afterEach('<p', ' class="bold"'))
+        .pipe(rename('afterEach.html'))
         .pipe(gulp.dest('build'));
 });
 
