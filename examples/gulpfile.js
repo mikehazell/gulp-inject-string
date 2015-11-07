@@ -37,4 +37,18 @@ gulp.task('inject:after', function(){
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('default', ['inject:append', 'inject:prepend', 'inject:wrap', 'inject:before', 'inject:after']);
+gulp.task('inject:beforeEach', function(){
+    gulp.src('src/example.html')
+        .pipe(inject.beforeEach('</p', ' Finis.'))
+        .pipe(rename('beforeEach.html'))
+        .pipe(gulp.dest('build'));
+});
+
+gulp.task('inject:afterEach', function(){
+    gulp.src('src/example.html')
+        .pipe(inject.afterEach('<p', ' class="bold"'))
+        .pipe(rename('afterEach.html'))
+        .pipe(gulp.dest('build'));
+});
+
+gulp.task('default', ['inject:append', 'inject:prepend', 'inject:wrap', 'inject:before', 'inject:after', 'inject:beforeEach', 'inject:afterEach']);
