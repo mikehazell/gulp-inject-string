@@ -68,26 +68,12 @@ module.exports = {
     },
     beforeEach: function(search, str) {
         return stream(function(fileContents) {
-            var start, end, index = 0 - search.length - str.length;
-            // loop over all occurences while moving the index taking the search string and inserted string's length into account
-            while ((index = fileContents.indexOf(search, index + search.length + str.length)) >= 0) {
-                start = fileContents.substr(0, index);
-                end = fileContents.substr(index);
-                fileContents = start + str + end;
-            }
-            return fileContents;
+            return fileContents.split(search).join(str + search);
         });
     },
     afterEach: function(search, str) {
         return stream(function(fileContents) {
-            var start, end, index = 0 - search.length - str.length;
-            // loop over all occurences while moving the index taking the search string and inserted string's length into account
-            while ((index = fileContents.indexOf(search, index + search.length + str.length)) >= 0) {
-                start = fileContents.substr(0, index + search.length);
-                end = fileContents.substr(index + search.length);
-                fileContents = start + str + end;
-            }
-            return fileContents;
+            return fileContents.split(search).join(search + str);
         });
     }
 };
