@@ -79,3 +79,12 @@ gulp.task('inject:afterEach', function(){
 gulp.task('default', ['inject:append', 'inject:prepend', 'inject:wrap', 'inject:before', 'inject:after']);
 
 ```
+
+
+# Changes
+
+### v1.0.0 - 2015-11-08
+
+- Added beforeEach and afterEach. Thanks [Joachim](https://github.com/jbjorge).
+
+After a year with no changes or issues, this might as well be a 1.0. It will probably never change again.
