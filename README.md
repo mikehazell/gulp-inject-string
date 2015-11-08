@@ -81,7 +81,7 @@ gulp.task('default', ['inject:append', 'inject:prepend', 'inject:wrap', 'inject:
 ```
 
 
-# Changes
+## Changes
 
 ### v1.0.0 - 2015-11-08
 
