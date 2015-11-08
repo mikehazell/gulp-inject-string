@@ -4,7 +4,8 @@
   "description": "Inject snippets in build",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/test.js"
+    "test": "mocha tests/test.js",
+    "coverage": "istanbul cover _mocha -- tests/test.js -R spec"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "chai": "^1.9.1",
     "gulp": "^3.8.6",
     "gulp-rename": "^1.2.0",
+    "istanbul": "^0.4.0",
     "mocha": "^1.21.3"
   },
   "dependencies": {
