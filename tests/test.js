@@ -32,6 +32,9 @@ describe('gulp-inject-string', function(){
         it('should define a afterEach method', function(){
             expect(inject.afterEach).to.be.a('function');
         });
+        it('should define a replace method', function(){
+            expect(inject.replace).to.be.a('function');
+        });
     });
 
 
@@ -296,6 +299,58 @@ describe('gulp-inject-string', function(){
             stream.write(fakeFile);
         });
 
+    });
+
+    describe('replace', function () {
+      var fakeFile;
+
+      beforeEach(function () {
+          fakeFile = new gutil.File({
+              base: 'test/fixtures',
+              cwd: 'test',
+              path: 'test/fixtures/index.html',
+              contents: new Buffer(fixtureFile)
+          });
+      });
+
+
+      it('should replace the search string with the given string', function(done){
+          var stream = inject.replace('<!-- TEST COMMENT -->', '<!-- IT WORKS -->');
+          var expectedFile = fs.readFileSync( path.join(__dirname, './expected/replace.html'));
+
+          stream.once('data', function(newFile){
+              expect(String(newFile.contents)).to.equal(String(expectedFile));
+              done();
+          });
+
+          stream.write(fakeFile);
+      });
+
+
+      it('should replace every instance of the search string with the given string', function(done){
+          var stream = inject.replace('Test file', 'New title');
+          var expectedFile = fs.readFileSync( path.join(__dirname, './expected/replace2.html'));
+
+          stream.once('data', function(newFile){
+              expect(String(newFile.contents)).to.equal(String(expectedFile));
+              done();
+          });
+
+          stream.write(fakeFile);
+      });
+
+      it('should do nothing if the search string is not found', function(done){
+          var stream = inject.replace('IAMNOTTHERE', 'NEITHERAMI');
+          var expectedFile = String(fixtureFile);
+
+          stream.once('data', function(newFile){
+              expect(String(newFile.contents)).to.equal(expectedFile);
+              done();
+          });
+
+          stream.write(fakeFile)
+
+      });
     });
 
     describe('_stream', function () {
