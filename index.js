@@ -75,6 +75,11 @@ module.exports = {
         return stream(function(fileContents) {
             return fileContents.split(search).join(search + str);
         });
+    },
+    replace: function(search, str) {
+      return stream(function(fileContents) {
+        return fileContents.replace(new RegExp(search, 'g'), str);
+      });
     }
 };
 
