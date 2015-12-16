@@ -25,11 +25,11 @@
   },
   "homepage": "https://github.com/Schmicko/gulp-inject-string",
   "devDependencies": {
-    "chai": "^1.9.1",
+    "chai": "^3.4.1",
     "gulp": "^3.8.6",
     "gulp-rename": "^1.2.0",
     "istanbul": "^0.4.0",
-    "mocha": "^1.21.3"
+    "mocha": "^2.3.4"
   },
   "dependencies": {
     "event-stream": "^3.1.7",
