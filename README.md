@@ -15,11 +15,12 @@ before(search, str)     // Inserts the string before the first occurence of *sea
 after(search, str)      // Inserts the string after the first occurence of *search*
 beforeEach(search, str) // Inserts the string before each occurence of *search*
 afterEach(search, str)  // Inserts the string after each occurence of *search*
+replace(search, str)    // Replaces each occurence of *search* with *str*
 ```
 
 ## Examples
 
-See `examples/build` for output.
+See [examples/build](https://github.com/Schmicko/gulp-inject-string/tree/master/examples/build) for output.
 
 ```js
 
@@ -99,6 +100,13 @@ gulp.task('default', [
 
 
 ## Changes
+
+### v1.1.0 - 2015-12-17
+
+- Added `replace`. Thanks [alexweber](https://github.com/alexweber).
+- Realised that as soon as you say something is complete and will not need to
+change... someone will think of something else it should do.
+
 
 ### v1.0.0 - 2015-11-08
 
