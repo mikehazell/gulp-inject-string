@@ -352,6 +352,35 @@ describe('gulp-inject-string', function(){
 
       });
     });
+	
+	describe('replaceAll', function () {
+      var fakeFile;
+
+      beforeEach(function () {
+          fakeFile = new gutil.File({
+              base: 'test/fixtures',
+              cwd: 'test',
+              path: 'test/fixtures/index.html',
+              contents: new Buffer(fixtureFile)
+          });
+      });
+
+
+      it('should replace all of the search strings with the given strings', function(done){
+          var stream = inject.replaceAll({
+			'<!-- TEST COMMENT -->' : '<!-- IT WORKS -->',
+			'Test file' : 'Test file replaced',
+		  });
+          var expectedFile = fs.readFileSync( path.join(__dirname, './expected/replaceAll.html'));
+
+          stream.once('data', function(newFile){
+              expect(String(newFile.contents)).to.equal(String(expectedFile));
+              done();
+          });
+
+          stream.write(fakeFile);
+      });
+    });
 
     describe('_stream', function () {
 

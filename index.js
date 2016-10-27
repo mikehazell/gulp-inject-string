@@ -80,6 +80,19 @@ module.exports = {
       return stream(function(fileContents) {
         return fileContents.replace(new RegExp(search, 'g'), str);
       });
+    },
+    replaceAll: function(searchObj) {
+      return stream(function(fileContents) {
+		var search,
+			str;
+		for(search in searchObj) {
+			if (searchObj.hasOwnProperty(search)) {
+				str = searchObj[search];
+				fileContents = fileContents.replace(new RegExp(search, 'g'), str);
+			}
+		}
+		return fileContents;
+      });
     }
 };
 
