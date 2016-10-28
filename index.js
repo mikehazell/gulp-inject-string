@@ -20,6 +20,18 @@ var stream = function(injectMethod){
     });
 };
 
+var forEachKey = function(searchObj, fileContents, callback) {
+    var search,
+        str;
+    for(search in searchObj) {
+        if (searchObj.hasOwnProperty(search)) {
+            str = searchObj[search];
+                fileContents = callback(search, str, fileContents);
+        }
+    }
+    return fileContents;
+};
+
 module.exports = {
     append: function(str){
         return stream(function(fileContents){
@@ -78,20 +90,14 @@ module.exports = {
     },
     replace: function(search, str) {
       return stream(function(fileContents) {
-        return fileContents.replace(new RegExp(search, 'g'), str);
+            return fileContents.replace(new RegExp(search, 'g'), str);
       });
     },
     replaceAll: function(searchObj) {
       return stream(function(fileContents) {
-		var search,
-			str;
-		for(search in searchObj) {
-			if (searchObj.hasOwnProperty(search)) {
-				str = searchObj[search];
-				fileContents = fileContents.replace(new RegExp(search, 'g'), str);
-			}
-		}
-		return fileContents;
+          return forEachKey(searchObj, fileContents, function(search, str, fileContentsModified) {
+              return fileContentsModified.replace(new RegExp(search, 'g'), str);
+          });
       });
     }
 };
