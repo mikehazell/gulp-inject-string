@@ -21,8 +21,7 @@ var stream = function(injectMethod){
 };
 
 var forEachKey = function(searchObj, fileContents, callback) {
-    var search,
-        str;
+    var search, str;
     for(search in searchObj) {
         if (searchObj.hasOwnProperty(search)) {
             str = searchObj[search];
