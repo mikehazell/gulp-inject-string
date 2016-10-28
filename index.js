@@ -89,11 +89,11 @@ module.exports = {
         });
     },
     replace: function(search, str) {
-      return stream(function(fileContents) {
-            return fileContents.replace(new RegExp(search, 'g'), str);
-      });
-    },
-    replaceAll: function(searchObj) {
+      var searchObj = search;
+      if(typeof search == "string") {
+          searchObj = {};
+		  searchObj[search] = str;
+	  }
       return stream(function(fileContents) {
           return forEachKey(searchObj, fileContents, function(search, str, fileContentsModified) {
               return fileContentsModified.replace(new RegExp(search, 'g'), str);

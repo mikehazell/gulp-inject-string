@@ -16,7 +16,7 @@ after(search, str)      // Inserts the string after the first occurence of *sear
 beforeEach(search, str) // Inserts the string before each occurence of *search*
 afterEach(search, str)  // Inserts the string after each occurence of *search*
 replace(search, str)    // Replaces each occurence of *search* with *str*
-replaceAll(searchObj)   // Replaces each occurence of each key with the corresponding value
+replace(searchObj)      // Replaces each occurence of each key with the corresponding value
 ```
 
 ## Examples
@@ -85,13 +85,13 @@ gulp.task('inject:replace', function(){
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('inject:replaceAll', function(){
+gulp.task('inject:replaceObject', function(){
     gulp.src('src/example.html')
-        .pipe(inject.replaceAll({
+        .pipe(inject.replace({
 			'test.js': 'test.min.js',
 			'<title>Example</title>': '<title>Replaced</title>'
 		}))
-        .pipe(rename('replaceAll.html'))
+        .pipe(rename('replaceObject.html'))
         .pipe(gulp.dest('build'));
 });
 
@@ -104,7 +104,7 @@ gulp.task('default', [
     'inject:beforeEach',
     'inject:afterEach',
     'inject:replace',
-	'inject:replaceAll'
+	'inject:replaceObject'
 ]);
 
 
