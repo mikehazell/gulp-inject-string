@@ -1,7 +1,7 @@
 
 var fs = require('fs'),
     path = require('path'),
-    gutil = require('gulp-util'),
+    Vinyl = require('vinyl'),
     mocha = require('mocha'),
     expect = require('chai').expect,
     inject = require('../');
@@ -43,7 +43,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
@@ -69,7 +69,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
@@ -95,7 +95,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
@@ -121,7 +121,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
@@ -161,7 +161,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
@@ -200,7 +200,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
@@ -253,7 +253,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
@@ -305,7 +305,7 @@ describe('gulp-inject-string', function(){
       var fakeFile;
 
       beforeEach(function () {
-          fakeFile = new gutil.File({
+          fakeFile = new Vinyl({
               base: 'test/fixtures',
               cwd: 'test',
               path: 'test/fixtures/index.html',
@@ -355,7 +355,7 @@ describe('gulp-inject-string', function(){
 
     describe('_stream', function () {
 
-        it('should fail with a gulp-util.PluginError', function(done){
+        it('should fail with a PluginError', function(done){
             var stream = inject._stream(null, { method: 'fail' });
 
             stream.once('error', function(error){
