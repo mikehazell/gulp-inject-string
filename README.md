@@ -1,6 +1,6 @@
 # gulp-inject-string
 
-[![Build Status](https://travis-ci.org/Schmicko/gulp-inject-string.svg?branch=master)](https://travis-ci.org/Schmicko/gulp-inject-string)
+[![Build Status](https://travis-ci.org/mikehazell/gulp-inject-string.svg?branch=master)](https://travis-ci.org/mikehazell/gulp-inject-string)
 [![NPM version](https://badge.fury.io/js/gulp-inject-string.svg)](http://badge.fury.io/js/gulp-inject-string)
 
 Inject snippets in build
@@ -20,7 +20,7 @@ replace(search, str)    // Replaces each occurence of *search* with *str*
 
 ## Examples
 
-See [examples/build](https://github.com/Schmicko/gulp-inject-string/tree/master/examples/build) for output.
+See [examples/build](https://github.com/mikehazell/gulp-inject-string/tree/master/examples/build) for output.
 
 ```js
 
