@@ -7,14 +7,14 @@
  */
 
 var es = require('event-stream'),
-    gutil = require('gulp-util');
+    PluginError = require('plugin-error');
 
 var stream = function(injectMethod){
     return es.map(function (file, cb) {
         try {
             file.contents = new Buffer( injectMethod( String(file.contents) ));
         } catch (err) {
-            return cb(new gutil.PluginError('gulp-inject-string', err));
+            return cb(new PluginError('gulp-inject-string', err));
         }
         cb(null, file);
     });

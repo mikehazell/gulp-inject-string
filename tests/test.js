@@ -1,7 +1,8 @@
 
 var fs = require('fs'),
     path = require('path'),
-    gutil = require('gulp-util'),
+    os = require('os'),
+    Vinyl = require('vinyl'),
     mocha = require('mocha'),
     expect = require('chai').expect,
     inject = require('../');
@@ -43,7 +44,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
@@ -69,7 +70,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
@@ -95,7 +96,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
@@ -121,7 +122,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
@@ -161,7 +162,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
@@ -200,7 +201,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
@@ -235,7 +236,7 @@ describe('gulp-inject-string', function(){
         });
 
         it('should work for a match at the first character in the target', function(done){
-            var stream = inject.beforeEach('<!doctype', '<!-- this is a poor example but should still work -->\n');
+            var stream = inject.beforeEach('<!doctype', '<!-- this is a poor example but should still work -->' + os.EOL);
             var expectedFile = fs.readFileSync( path.join(__dirname, './expected/beforeEach2.html'));
 
             stream.once('data', function(newFile){
@@ -253,7 +254,7 @@ describe('gulp-inject-string', function(){
         var fakeFile;
 
         beforeEach(function () {
-            fakeFile = new gutil.File({
+            fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
@@ -288,7 +289,7 @@ describe('gulp-inject-string', function(){
         });
 
         it('should work for a match at the last character in the target', function(done){
-            var stream = inject.afterEach('</html>\n', '<!-- this is a poor example but should still work -->\n');
+            var stream = inject.afterEach('</html>' + os.EOL, '<!-- this is a poor example but should still work -->' + os.EOL);
             var expectedFile = fs.readFileSync( path.join(__dirname, './expected/afterEach2.html'));
 
             stream.once('data', function(newFile){
@@ -305,7 +306,7 @@ describe('gulp-inject-string', function(){
       var fakeFile;
 
       beforeEach(function () {
-          fakeFile = new gutil.File({
+          fakeFile = new Vinyl({
               base: 'test/fixtures',
               cwd: 'test',
               path: 'test/fixtures/index.html',
@@ -355,7 +356,7 @@ describe('gulp-inject-string', function(){
 
     describe('_stream', function () {
 
-        it('should fail with a gulp-util.PluginError', function(done){
+        it('should fail with a PluginError', function(done){
             var stream = inject._stream(null, { method: 'fail' });
 
             stream.once('error', function(error){
