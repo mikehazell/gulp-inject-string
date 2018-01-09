@@ -101,6 +101,10 @@ gulp.task('default', [
 
 ## Changes
 
+### v1.1.1 - 2018-01-09
+
+- Removed gulp-util dependency. Thanks [TheDancingCode](https://github.com/TheDancingCode)
+
 ### v1.1.0 - 2015-12-17
 
 - Added `replace`. Thanks [alexweber](https://github.com/alexweber).
