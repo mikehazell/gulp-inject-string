@@ -80,6 +80,15 @@ module.exports = {
       return stream(function(fileContents) {
         return fileContents.replace(new RegExp(search, 'g'), str);
       });
+    },
+    custom: function(callback) {
+        return stream(function(fileContents) {
+            if (typeof callback !== "function") {
+                return fileContents;
+            }
+            var newContents = callback(fileContents);
+            return typeof newContents === 'string' ? newContents : fileContents;
+        });
     }
 };
 
