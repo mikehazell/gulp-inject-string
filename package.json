@@ -33,7 +33,7 @@
     "vinyl": "^2.1.0"
   },
   "dependencies": {
-    "event-stream": "^3.3.5",
-    "plugin-error": "^0.1.2"
+    "event-stream": "3.3.4",
+    "plugin-error": "0.1.2"
   }
 }
