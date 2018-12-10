@@ -350,8 +350,23 @@ describe('gulp-inject-string', function(){
           });
 
           stream.write(fakeFile)
-
       });
+	  
+	  it('should replace all of the search strings with the given strings', function(done){
+          var stream = inject.replace({
+			'<!-- TEST COMMENT -->' : '<!-- IT WORKS -->',
+			'Test file' : 'Test file replaced'
+		  });
+          var expectedFile = fs.readFileSync( path.join(__dirname, './expected/replaceObject.html'));
+
+          stream.once('data', function(newFile){
+              expect(String(newFile.contents)).to.equal(String(expectedFile));
+              done();
+          });
+
+          stream.write(fakeFile);
+      });
+
     });
 
     describe('_stream', function () {
