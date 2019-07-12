@@ -12,7 +12,7 @@ var es = require('event-stream'),
 var stream = function(injectMethod) {
     return es.map(function(file, cb) {
         try {
-            file.contents = new Buffer(injectMethod(String(file.contents)));
+            file.contents = Buffer.from(injectMethod(String(file.contents)));
         } catch (err) {
             return cb(new PluginError('gulp-inject-string', err));
         }
@@ -78,18 +78,22 @@ module.exports = {
     },
     replace: function(search, str) {
         return stream(function(fileContents) {
+            return fileContents.replace(search, str);
+        });
+    },
+    replaceAll: function(search, str) {
+        return stream(function(fileContents) {
             if (search instanceof RegExp) {
-                return fileContents.replace(search, str);
+                throw new Error(
+                    'replaceAll can only take a string. Use `replace` with a regex and set the global flag `g` to replace all matches.'
+                );
             }
-
-            // This will be slower than the regex version but avoids regex injection issues.
             if (typeof search === 'string') {
                 while (fileContents.includes(search)) {
                     fileContents = fileContents.replace(search, str);
                 }
                 return fileContents;
             }
-
             return fileContents;
         });
     },

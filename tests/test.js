@@ -46,7 +46,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -71,7 +71,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -96,7 +96,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -121,7 +121,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -160,7 +160,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -199,7 +199,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -258,7 +258,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -314,7 +314,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -335,27 +335,13 @@ describe('gulp-inject-string', function() {
             stream.write(fakeFile);
         });
 
-        it('should replace every instance of the search string with the given string', function(done) {
-            var stream = inject.replace('Test file', 'New title');
-            var expectedFile = fs.readFileSync(
-                path.join(__dirname, './expected/replace2.html')
-            );
-
-            stream.once('data', function(newFile) {
-                expect(String(newFile.contents)).to.equal(String(expectedFile));
-                done();
-            });
-
-            stream.write(fakeFile);
-        });
-
         it('should not care about being inside a script', function(done) {
             var stream = inject.replace(
                 'process.env.SUPER_SECRET_KEY',
                 '"12345"'
             );
             var expectedFile = fs.readFileSync(
-                path.join(__dirname, './expected/replace3.html')
+                path.join(__dirname, './expected/replace2.html')
             );
 
             stream.once('data', function(newFile) {
@@ -372,7 +358,7 @@ describe('gulp-inject-string', function() {
                 '// A regular comment'
             );
             var expectedFile = fs.readFileSync(
-                path.join(__dirname, './expected/replace4.html')
+                path.join(__dirname, './expected/replace3.html')
             );
 
             stream.once('data', function(newFile) {
@@ -389,7 +375,7 @@ describe('gulp-inject-string', function() {
                 '// A regular comment'
             );
             var expectedFile = fs.readFileSync(
-                path.join(__dirname, './expected/replace4.html')
+                path.join(__dirname, './expected/replace3.html')
             );
 
             stream.once('data', function(newFile) {
@@ -406,6 +392,45 @@ describe('gulp-inject-string', function() {
 
             stream.once('data', function(newFile) {
                 expect(String(newFile.contents)).to.equal(expectedFile);
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+    });
+
+    describe('replaceAll', function() {
+        var fakeFile;
+
+        beforeEach(function() {
+            fakeFile = new Vinyl({
+                base: 'test/fixtures',
+                cwd: 'test',
+                path: 'test/fixtures/index.html',
+                contents: Buffer.from(fixtureFile),
+            });
+        });
+
+        it('should replace every instance of the search string with the given string', function(done) {
+            var stream = inject.replaceAll('Test file', 'New title');
+            var expectedFile = fs.readFileSync(
+                path.join(__dirname, './expected/replaceAll.html')
+            );
+
+            stream.once('data', function(newFile) {
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
+        it('should throw with an error if you pass a regex as the search param', function(done) {
+            var stream = inject.replaceAll(/Text file/, 'New title');
+
+            stream.once('error', function(error) {
+                expect(error.plugin).to.equal('gulp-inject-string');
+                expect(error.message).to.contain('replaceAll can only take a string');
                 done();
             });
 
