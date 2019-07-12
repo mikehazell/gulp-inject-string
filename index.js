@@ -97,6 +97,15 @@ module.exports = {
             return fileContents;
         });
     },
+    custom: function(callback) {
+        return stream(function(fileContents) {
+            if (typeof callback !== 'function') {
+                return fileContents;
+            }
+            var newContents = callback(fileContents);
+            return typeof newContents === 'string' ? newContents : fileContents;
+        });
+    },
 };
 
 module.exports._stream = stream;
