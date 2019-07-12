@@ -16,6 +16,8 @@ after(search, str)      // Inserts the string after the first occurence of *sear
 beforeEach(search, str) // Inserts the string before each occurence of *search*
 afterEach(search, str)  // Inserts the string after each occurence of *search*
 replace(search, str)    // Replaces each occurence of *search* with *str*
+replaceAll(search, str) // Replaces each occurence of *search* with *str*
+custom(function)        // Do what ever you want to do.
 ```
 
 ## Examples
@@ -28,78 +30,140 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     inject = require('gulp-inject-string');
 
-gulp.task('inject:append', function(){
-    gulp.src('src/example.html')
+function injectAppend() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.append('\n<!-- Created: ' + Date() + ' -->'))
         .pipe(rename('append.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:prepend', function(){
-    gulp.src('src/example.html')
+function injectPrepend() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.prepend('<!-- Created: ' + Date() + ' -->\n'))
         .pipe(rename('prepend.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:wrap', function(){
-    gulp.src('src/example.html')
-        .pipe(inject.wrap('<!-- Created: ' + Date() + ' -->\n', '<!-- Author: Mike Hazell -->'))
+function injectWrap() {
+    return gulp
+        .src('src/example.html')
+        .pipe(
+            inject.wrap(
+                '<!-- Created: ' + Date() + ' -->\n',
+                '<!-- Author: Mike Hazell -->'
+            )
+        )
         .pipe(rename('wrap.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:before', function(){
-    gulp.src('src/example.html')
-        .pipe(inject.before('<script', '<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>\n'))
+function injectBefore() {
+    return gulp
+        .src('src/example.html')
+        .pipe(
+            inject.before(
+                '<script',
+                '<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>\n'
+            )
+        )
         .pipe(rename('before.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:after', function(){
-    gulp.src('src/example.html')
-        .pipe(inject.after('</title>', '\n<link rel="stylesheet" href="test.css">\n'))
+function injectAfter() {
+    return gulp
+        .src('src/example.html')
+        .pipe(
+            inject.after(
+                '</title>',
+                '\n<link rel="stylesheet" href="test.css">\n'
+            )
+        )
         .pipe(rename('after.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:beforeEach', function(){
-    gulp.src('src/example.html')
+function injectBeforeEach() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.beforeEach('</p', ' Finis.'))
         .pipe(rename('beforeEach.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:afterEach', function(){
-    gulp.src('src/example.html')
+function injectAfterEach() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.afterEach('<p', ' class="bold"'))
         .pipe(rename('afterEach.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:replace', function(){
-    gulp.src('src/example.html')
+function injectReplace() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.replace('test.js', 'test.min.js'))
         .pipe(rename('replace.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('default', [
-    'inject:append',
-    'inject:prepend',
-    'inject:wrap',
-    'inject:before',
-    'inject:after',
-    'inject:beforeEach',
-    'inject:afterEach',
-    'inject:replace'
-]);
+function injectReplaceAll() {
+    return gulp
+        .src('src/example.html')
+        .pipe(inject.replaceAll('Lorem ipsum', 'Muspi merol'))
+        .pipe(rename('replaceAll.html'))
+        .pipe(gulp.dest('build'));
+}
 
+function injectCustom() {
+    return gulp
+        .src('src/example.html')
+        .pipe(inject.custom(function (str) {
+            return str.split('\n').reverse().join('\n')
+        }))
+        .pipe(rename('custom.html'))
+        .pipe(gulp.dest('build'));
+}
 
+exports.default = gulp.parallel(
+    injectAppend,
+    injectPrepend,
+    injectWrap,
+    injectBefore,
+    injectAfter,
+    injectBeforeEach,
+    injectAfterEach,
+    injectReplace,
+    injectReplaceAll,
+    injectCustom
+);
 ```
 
 
 ## Changes
+
+### v2.0.0 - 2019-07-12
+
+**Breaking change:**
+
+`replace` now matches the Javascript String.replace API. It can take a `String` or a `RegExp`
+as the search parameter. If given a string it will only replace the first instance of that string.
+To replace **all** instances of a string use the new method `replaceAll`.
+
+**Feature**
+
+New method `inject.custom` takes a method as it's only argument. This method will be called
+with the entire content of the file as a `String` and should return a `String`. Beyond that
+you can do what ever you want inside custom.
+
+Thanks to [Eugene Zhuchenko](https://github.com/evanre) for that one and for his patience. It took me a while to merge this.
+
+**Docs update**
+
+Updated the docs and examples to match the gulp `export` API over the older `gulp.task` api.
+
 
 ### v1.1.1 - 2018-01-09
 

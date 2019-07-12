@@ -36,7 +36,10 @@ describe('gulp-inject-string', function() {
         it('should define a replace method', function() {
             expect(inject.replace).to.be.a('function');
         });
-        it('should define a custom method', function(){
+        it('should define a replaceAll method', function() {
+            expect(inject.replaceAll).to.be.a('function');
+        });
+        it('should define a custom method', function() {
             expect(inject.custom).to.be.a('function');
         });
     });
@@ -49,7 +52,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -74,7 +77,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -99,7 +102,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test/',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -124,7 +127,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -163,7 +166,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -202,7 +205,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -261,7 +264,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -317,7 +320,7 @@ describe('gulp-inject-string', function() {
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile),
+                contents: Buffer.from(fixtureFile),
             });
         });
 
@@ -338,10 +341,47 @@ describe('gulp-inject-string', function() {
             stream.write(fakeFile);
         });
 
-        it('should replace every instance of the search string with the given string', function(done) {
-            var stream = inject.replace('Test file', 'New title');
+        it('should not care about being inside a script', function(done) {
+            var stream = inject.replace(
+                'process.env.SUPER_SECRET_KEY',
+                '"12345"'
+            );
             var expectedFile = fs.readFileSync(
                 path.join(__dirname, './expected/replace2.html')
+            );
+
+            stream.once('data', function(newFile) {
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
+        it('should replace a string containing regex special chars', function(done) {
+            var stream = inject.replace(
+                '/* a block comment */',
+                '// A regular comment'
+            );
+            var expectedFile = fs.readFileSync(
+                path.join(__dirname, './expected/replace3.html')
+            );
+
+            stream.once('data', function(newFile) {
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
+        it('should accept a regular expression as an argument', function(done) {
+            var stream = inject.replace(
+                /\/\* a block comment \*\//gi,
+                '// A regular comment'
+            );
+            var expectedFile = fs.readFileSync(
+                path.join(__dirname, './expected/replace3.html')
             );
 
             stream.once('data', function(newFile) {
@@ -365,27 +405,40 @@ describe('gulp-inject-string', function() {
         });
     });
 
-
-    describe('custom', function () {
+    describe('replaceAll', function() {
         var fakeFile;
 
-        beforeEach(function () {
+        beforeEach(function() {
             fakeFile = new Vinyl({
                 base: 'test/fixtures',
                 cwd: 'test',
                 path: 'test/fixtures/index.html',
-                contents: new Buffer(fixtureFile)
+                contents: Buffer.from(fixtureFile),
             });
         });
 
-        it('should replace the given string with returned string from a callback', function(done){
-            var stream = inject.custom(function (str) {
-                return str.replace(new RegExp('<!-- TEST COMMENT -->', 'g'), '<!-- IT WORKS -->');
-            });
-            var expectedFile = fs.readFileSync( path.join(__dirname, './expected/replace.html'));
+        it('should replace every instance of the search string with the given string', function(done) {
+            var stream = inject.replaceAll('Test file', 'New title');
+            var expectedFile = fs.readFileSync(
+                path.join(__dirname, './expected/replaceAll.html')
+            );
 
-            stream.once('data', function(newFile){
+            stream.once('data', function(newFile) {
                 expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
+        it('should throw with an error if you pass a regex as the search param', function(done) {
+            var stream = inject.replaceAll(/Text file/, 'New title');
+
+            stream.once('error', function(error) {
+                expect(error.plugin).to.equal('gulp-inject-string');
+                expect(error.message).to.contain(
+                    'replaceAll can only take a string'
+                );
                 done();
             });
 
@@ -393,8 +446,55 @@ describe('gulp-inject-string', function() {
         });
     });
 
-    describe('_stream', function () {
-        it('should fail with a PluginError', function(done){
+    describe('custom', function() {
+        var fakeFile;
+
+        beforeEach(function() {
+            fakeFile = new Vinyl({
+                base: 'test/fixtures',
+                cwd: 'test',
+                path: 'test/fixtures/index.html',
+                contents: Buffer.from(fixtureFile),
+            });
+        });
+
+        it('should replace the given string with returned string from a callback', function(done) {
+            var stream = inject.custom(function(str) {
+                return str.replace(
+                    new RegExp('<!-- TEST COMMENT -->', 'g'),
+                    '<!-- IT WORKS -->'
+                );
+            });
+            var expectedFile = fs.readFileSync(
+                path.join(__dirname, './expected/replace.html')
+            );
+
+            stream.once('data', function(newFile) {
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
+        it('can replace the entire contents of a file', function(done) {
+            var stream = inject.custom(function(str) {
+                return 'Something completely different';
+            });
+
+            stream.once('data', function(newFile) {
+                expect(String(newFile.contents)).to.equal(
+                    'Something completely different'
+                );
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+    });
+
+    describe('_stream', function() {
+        it('should fail with a PluginError', function(done) {
             var stream = inject._stream(null, { method: 'fail' });
 
             stream.once('error', function(error) {
