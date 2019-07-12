@@ -349,6 +349,57 @@ describe('gulp-inject-string', function() {
             stream.write(fakeFile);
         });
 
+        it('should not care about being inside a script', function(done) {
+            var stream = inject.replace(
+                'process.env.SUPER_SECRET_KEY',
+                '"12345"'
+            );
+            var expectedFile = fs.readFileSync(
+                path.join(__dirname, './expected/replace3.html')
+            );
+
+            stream.once('data', function(newFile) {
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
+        it('should replace a string containing regex special chars', function(done) {
+            var stream = inject.replace(
+                '/* a block comment */',
+                '// A regular comment'
+            );
+            var expectedFile = fs.readFileSync(
+                path.join(__dirname, './expected/replace4.html')
+            );
+
+            stream.once('data', function(newFile) {
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
+        it('should accept a regular expression as an argument', function(done) {
+            var stream = inject.replace(
+                /\/\* a block comment \*\//gi,
+                '// A regular comment'
+            );
+            var expectedFile = fs.readFileSync(
+                path.join(__dirname, './expected/replace4.html')
+            );
+
+            stream.once('data', function(newFile) {
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+
         it('should do nothing if the search string is not found', function(done) {
             var stream = inject.replace('IAMNOTTHERE', 'NEITHERAMI');
             var expectedFile = String(fixtureFile);

@@ -78,7 +78,19 @@ module.exports = {
     },
     replace: function(search, str) {
         return stream(function(fileContents) {
-            return fileContents.replace(new RegExp(search, 'g'), str);
+            if (search instanceof RegExp) {
+                return fileContents.replace(search, str);
+            }
+
+            // This will be slower than the regex version but avoids regex injection issues.
+            if (typeof search === 'string') {
+                while (fileContents.includes(search)) {
+                    fileContents = fileContents.replace(search, str);
+                }
+                return fileContents;
+            }
+
+            return fileContents;
         });
     },
 };
