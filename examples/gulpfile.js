@@ -2,22 +2,25 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     inject = require('../');
 
-gulp.task('inject:append', function() {
-    gulp.src('src/example.html')
+function injectAppend() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.append('\n<!-- Created: ' + Date() + ' -->'))
         .pipe(rename('append.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:prepend', function() {
-    gulp.src('src/example.html')
+function injectPrepend() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.prepend('<!-- Created: ' + Date() + ' -->\n'))
         .pipe(rename('prepend.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:wrap', function() {
-    gulp.src('src/example.html')
+function injectWrap() {
+    return gulp
+        .src('src/example.html')
         .pipe(
             inject.wrap(
                 '<!-- Created: ' + Date() + ' -->\n',
@@ -26,10 +29,11 @@ gulp.task('inject:wrap', function() {
         )
         .pipe(rename('wrap.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:before', function() {
-    gulp.src('src/example.html')
+function injectBefore() {
+    return gulp
+        .src('src/example.html')
         .pipe(
             inject.before(
                 '<script',
@@ -38,10 +42,11 @@ gulp.task('inject:before', function() {
         )
         .pipe(rename('before.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:after', function() {
-    gulp.src('src/example.html')
+function injectAfter() {
+    return gulp
+        .src('src/example.html')
         .pipe(
             inject.after(
                 '</title>',
@@ -50,36 +55,64 @@ gulp.task('inject:after', function() {
         )
         .pipe(rename('after.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:beforeEach', function() {
-    gulp.src('src/example.html')
+function injectBeforeEach() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.beforeEach('</p', ' Finis.'))
         .pipe(rename('beforeEach.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:afterEach', function() {
-    gulp.src('src/example.html')
+function injectAfterEach() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.afterEach('<p', ' class="bold"'))
         .pipe(rename('afterEach.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('inject:replace', function() {
-    gulp.src('src/example.html')
+function injectReplace() {
+    return gulp
+        .src('src/example.html')
         .pipe(inject.replace('test.js', 'test.min.js'))
         .pipe(rename('replace.html'))
         .pipe(gulp.dest('build'));
-});
+}
 
-gulp.task('default', [
-    'inject:append',
-    'inject:prepend',
-    'inject:wrap',
-    'inject:before',
-    'inject:after',
-    'inject:beforeEach',
-    'inject:afterEach',
-    'inject:replace',
-]);
+function injectReplaceAll() {
+    return gulp
+        .src('src/example.html')
+        .pipe(inject.replaceAll('Lorem ipsum', 'Muspi merol'))
+        .pipe(rename('replaceAll.html'))
+        .pipe(gulp.dest('build'));
+}
+
+function injectCustom() {
+    return gulp
+        .src('src/example.html')
+        .pipe(
+            inject.custom(function(str) {
+                return str
+                    .split('\n')
+                    .reverse()
+                    .join('\n');
+            })
+        )
+        .pipe(rename('custom.html'))
+        .pipe(gulp.dest('build'));
+}
+
+exports.default = gulp.parallel(
+    injectAppend,
+    injectPrepend,
+    injectWrap,
+    injectBefore,
+    injectAfter,
+    injectBeforeEach,
+    injectAfterEach,
+    injectReplace,
+    injectReplaceAll,
+    injectCustom
+);
