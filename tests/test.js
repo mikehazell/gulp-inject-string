@@ -36,6 +36,9 @@ describe('gulp-inject-string', function() {
         it('should define a replace method', function() {
             expect(inject.replace).to.be.a('function');
         });
+        it('should define a replaceAll method', function() {
+            expect(inject.replaceAll).to.be.a('function');
+        });
     });
 
     describe('append', function() {
