@@ -476,6 +476,21 @@ describe('gulp-inject-string', function() {
 
             stream.write(fakeFile);
         });
+
+        it('can replace the entire contents of a file', function(done) {
+            var stream = inject.custom(function(str) {
+                return 'Something completely different';
+            });
+
+            stream.once('data', function(newFile) {
+                expect(String(newFile.contents)).to.equal(
+                    'Something completely different'
+                );
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
     });
 
     describe('_stream', function() {
