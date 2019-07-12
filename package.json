@@ -26,10 +26,10 @@
   "homepage": "https://github.com/Schmicko/gulp-inject-string",
   "devDependencies": {
     "chai": "^4.2.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-rename": "^1.4.0",
     "istanbul": "^0.4.5",
-    "mocha": "^5.2.0",
+    "mocha": "^6.1.4",
     "vinyl": "^2.2.0"
   },
   "dependencies": {
