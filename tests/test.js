@@ -36,6 +36,9 @@ describe('gulp-inject-string', function() {
         it('should define a replace method', function() {
             expect(inject.replace).to.be.a('function');
         });
+        it('should define a custom method', function(){
+            expect(inject.custom).to.be.a('function');
+        });
     });
 
     describe('append', function() {
@@ -362,8 +365,36 @@ describe('gulp-inject-string', function() {
         });
     });
 
-    describe('_stream', function() {
-        it('should fail with a PluginError', function(done) {
+
+    describe('custom', function () {
+        var fakeFile;
+
+        beforeEach(function () {
+            fakeFile = new Vinyl({
+                base: 'test/fixtures',
+                cwd: 'test',
+                path: 'test/fixtures/index.html',
+                contents: new Buffer(fixtureFile)
+            });
+        });
+
+        it('should replace the given string with returned string from a callback', function(done){
+            var stream = inject.custom(function (str) {
+                return str.replace(new RegExp('<!-- TEST COMMENT -->', 'g'), '<!-- IT WORKS -->');
+            });
+            var expectedFile = fs.readFileSync( path.join(__dirname, './expected/replace.html'));
+
+            stream.once('data', function(newFile){
+                expect(String(newFile.contents)).to.equal(String(expectedFile));
+                done();
+            });
+
+            stream.write(fakeFile);
+        });
+    });
+
+    describe('_stream', function () {
+        it('should fail with a PluginError', function(done){
             var stream = inject._stream(null, { method: 'fail' });
 
             stream.once('error', function(error) {
