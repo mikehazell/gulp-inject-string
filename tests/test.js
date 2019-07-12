@@ -430,7 +430,9 @@ describe('gulp-inject-string', function() {
 
             stream.once('error', function(error) {
                 expect(error.plugin).to.equal('gulp-inject-string');
-                expect(error.message).to.contain('replaceAll can only take a string');
+                expect(error.message).to.contain(
+                    'replaceAll can only take a string'
+                );
                 done();
             });
 
