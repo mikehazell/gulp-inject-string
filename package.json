@@ -30,7 +30,7 @@
     "gulp": "^4.0.2",
     "gulp-rename": "^1.4.0",
     "istanbul": "^0.4.5",
-    "mocha": "^6.1.4",
+    "mocha": "^10.2.0",
     "vinyl": "^2.2.0"
   },
   "dependencies": {
